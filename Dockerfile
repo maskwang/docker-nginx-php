@@ -15,8 +15,8 @@ RUN add-apt-repository -y ppa:ondrej/php5
 RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
 RUN apt-get install -y php5-cli php5-fpm php5-mysql php5-pgsql php5-sqlite php5-curl\
-		       php5-gd php5-mcrypt php5-intl php5-imap php5-tidy php5-memcache php5-xdebug\
-					 php5-zmq php5-redis
+		       php5-gd php5-mcrypt php5-intl php5-imap php5-tidy php5-memcache\
+               php5-xdebug php5-zmq php5-redis
 
 RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php5/fpm/php.ini
 RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php5/cli/php.ini
@@ -38,8 +38,8 @@ RUN chmod +x        /etc/service/nginx/run
 RUN mkdir -p        /etc/service/phpfpm
 ADD build/phpfpm.sh /etc/service/phpfpm/run
 RUN chmod +x        /etc/service/phpfpm/run
-RUN mkdir -p 				/var/log/xdebug
-RUM chmod -R 777    /var/log/xdebug
+RUN mkdir -p 		/var/log/xdebug
+RUN chmod -R 777    /var/log/xdebug
 ADD build/xdebug.ini /etc/php5/fpm/conf.d/20-xdebug.ini
 
 EXPOSE 80
