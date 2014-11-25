@@ -10,7 +10,8 @@ CMD ["/sbin/my_init"]
 
 # Nginx-PHP Installation
 RUN apt-get update
-RUN apt-get install -y vim curl wget build-essential python-software-properties
+RUN apt-get install -y vim curl wget build-essential python-software-properties\
+               telnet nmap 
 RUN add-apt-repository -y ppa:ondrej/php5
 RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
