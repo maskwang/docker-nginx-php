@@ -13,16 +13,19 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 CMD ["/sbin/my_init"]
 
+# Replace APT Source
+ADD build/sources.list /tmp/sources.list
+RUN mv /tmp/sources.list /etc/apt/sources.list
+
 # Nginx-PHP Installation
 RUN apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y vim curl wget build-essential python-software-properties\
                telnet nmap
-RUN add-apt-repository -y ppa:ondrej/php5
+RUN add-apt-repository -y ppa:ondrej/php
 RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --force-yes php5-cli php5-fpm php5-mysql php5-pgsql php5-sqlite php5-curl\
-		       php5-gd php5-mcrypt php5-intl php5-imap php5-tidy php5-memcache\
-               php5-xdebug php5-zmq php5-redis
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --force-yes php5.6 php5.6-mcrypt php5.6-mbstring php5.6-curl\
+          php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-zip php5.6-memcached php5.6-redis php5.6-xdebug
 
 RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php5/fpm/php.ini
 RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php5/cli/php.ini
