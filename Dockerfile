@@ -9,7 +9,12 @@ ENV LC_ALL     en_US.UTF-8
 
 ENV HOME /root
 
+# enable ssh
+RUN rm -f /etc/service/sshd/down
 RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+
+# Enabling the insecure key permanently
+RUN /usr/sbin/enable_insecure_key
 
 CMD ["/sbin/my_init"]
 
