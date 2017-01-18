@@ -16,7 +16,6 @@ CMD ["/sbin/my_init"]
 # Replace APT Source
 ADD build/sources.list /tmp/sources.list
 RUN mv /tmp/sources.list /etc/apt/sources.list
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ precise universe" >> /etc/apt/sources.list
 
 # Nginx-PHP Installation
 RUN apt-get update
