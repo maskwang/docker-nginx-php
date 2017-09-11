@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-php-fpm5.6 -c /etc/php/5.6/fpm
+php-fpm7.1 -c /etc/php/7.1/fpm

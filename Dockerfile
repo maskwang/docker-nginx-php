@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.19
+FROM phusion/baseimage:latest
 
 MAINTAINER Mask Wang, mask.wang.cn@gmail.com
 
@@ -7,6 +7,7 @@ RUN locale-gen en_US.UTF-8
 ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
 
+ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /root
 
 # enable ssh
@@ -24,25 +25,25 @@ RUN mv /tmp/sources.list /etc/apt/sources.list
 
 # Nginx-PHP Installation
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y vim curl wget build-essential python-software-properties\
+RUN apt-get install -y vim curl wget build-essential python-software-properties\
                telnet nmap
 RUN add-apt-repository -y ppa:ondrej/php
 RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y php5.6  php5.6-fpm php5.6-mcrypt php5.6-mbstring php5.6-curl\
-          php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-zip php5.6-memcached php5.6-redis php5.6-xdebug
+RUN apt-get install -y php7.1  php7.1-fpm php7.1-mcrypt php7.1-mbstring php7.1-curl\
+          php7.1-cli php7.1-mysql php7.1-gd php7.1-intl php7.1-xsl php7.1-zip php7.1-memcached php7.1-redis php7.1-xdebug
 
-RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php/5.6/fpm/php.ini
-RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php/5.6/cli/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php/7.1/fpm/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php/7.1/cli/php.ini
 
-RUN sed -i "s/display_errors = Off/display_errors = On/" /etc/php/5.6/fpm/php.ini
-RUN sed -i "s/display_errors = Off/display_errors = On/" /etc/php/5.6/cli/php.ini
+RUN sed -i "s/display_errors = Off/display_errors = On/" /etc/php/7.1/fpm/php.ini
+RUN sed -i "s/display_errors = Off/display_errors = On/" /etc/php/7.1/cli/php.ini
 
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y nginx
+RUN apt-get install -y nginx
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/5.6/fpm/php-fpm.conf
-RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/5.6/fpm/php.ini
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.1/fpm/php-fpm.conf
+RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
 
 RUN mkdir -p        /var/www
 ADD build/default   /etc/nginx/sites-available/default
@@ -52,9 +53,11 @@ RUN chmod +x        /etc/service/nginx/run
 RUN mkdir -p        /etc/service/phpfpm
 ADD build/phpfpm.sh /etc/service/phpfpm/run
 RUN chmod +x        /etc/service/phpfpm/run
+RUN mkdir -p        /run/php
+RUN chmod -R 777    /run/php
 RUN mkdir -p 		/var/log/xdebug
 RUN chmod -R 777    /var/log/xdebug
-ADD build/xdebug.ini /etc/php/5.6/fpm/conf.d/20-xdebug.ini
+ADD build/xdebug.ini /etc/php/7.1/fpm/conf.d/20-xdebug.ini
 
 EXPOSE 80
 # End Nginx-PHP
